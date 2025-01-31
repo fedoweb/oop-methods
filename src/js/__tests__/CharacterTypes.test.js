@@ -13,22 +13,29 @@ test.each([
 });
 
 test.each([
-    [Bowman, "I"],
-    [Bowman, "IvanIvanIvan"],
-    [Swordsman, "I"],
-    [Swordsman, "IvanIvanIvan"],
-    [Magician, "I"],
-    [Magician, "IvanIvanIvan"],
-    [Daemon, "I"],
-    [Daemon, "IvanIvanIvan"],
-    [Undead, "I"],
-    [Undead, "IvanIvanIvan"],
-    [Zombie, "I"],
-    [Zombie, "IvanIvanIvan"],
-    ])("throw an error for invalid name", (type, name) => {
-
-    expect(() => new type(name)).toThrow("Имя должно быть строкой длиной от 2 до 10 символов.");
+    [Bowman, "Ivan", 0, { name: "Ivan", type: "Bowman", health: 100, level: 2, attack: 30, defence: 30 }],
+    [Swordsman, "Ivan", 1, { name: "Ivan", type: "Swordsman", health: 100, level: 2, attack: 48, defence: 12 }],
+    [Magician, "Ivan", 10, { name: "Ivan", type: "Magician", health: 100, level: 2, attack: 12, defence: 48 }],
+    [Daemon, "Ivan", 25, { name: "Ivan", type: "Daemon", health: 100, level: 2, attack: 12, defence: 48 }],
+    [Undead, "Ivan", 50, { name: "Ivan", type: "Undead", health: 100, level: 2, attack: 30, defence: 30 }],
+    [Zombie, "Ivan", 75,  { name: "Ivan", type: "Zombie", health: 100, level: 2, attack: 48, defence: 12 }],
+    ])("testing levelUp method with valid data", (type, name, points, expected) => {
+    let result = new type(name);
+    result.damage(points);
+    result.levelUp();
+    expect(result).toEqual(expected);
 });
 
-
-
+test.each([
+    [Bowman, "Ivan",],
+    [Swordsman, "Ivan"],
+    [Magician, "Ivan"],
+    [Daemon, "Ivan"],
+    [Undead, "Ivan"],
+    [Zombie, "Ivan"],
+    ])("testing levelUp and damage method with invalid data", (type, name) => {
+    let result = new type(name);
+    result.damage(200);
+    expect(() => result.levelUp()).toThrow("Hельзя повысить level умершего");
+    expect(() => result.damage(25)).toThrow("Hельзя нанести урон умершему");
+});

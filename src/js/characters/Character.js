@@ -14,17 +14,6 @@ export default class Character {
         this.type = type;
         this.health = 100;
         this.level = 1;
-
-        if(this.type === "Bowman" || this.type === "Undead") {
-            this.attack = 25;
-            this.defence = 25;
-        } else if (this.type === "Swordsman" || this.type === "Zombie") {
-            this.attack = 40;
-            this.defence = 10;
-        } else {
-            this.attack = 10;
-            this.defence = 40;
-        }
     }
 
     levelUp() {
@@ -34,13 +23,15 @@ export default class Character {
             this.defence *= 1.2;
             this.health = 100;
         } else {
-            throw new Error("Hельзя повысить lavel умершего");
+            throw new Error("Hельзя повысить level умершего");
         }
     }
 
     damage(points) {
         if (this.health > 0) {
             this.health -= points * (1 - this.defence / 100);
-        } 
+        } else {
+            throw new Error("Hельзя нанести урон умершему");
+        }
     }
 }
